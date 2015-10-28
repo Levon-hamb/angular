@@ -4,26 +4,81 @@
     <meta charset="UTF-8">
     <title></title>
     <script src="/libs/angular.js"></script>
+    <link rel="stylesheet" href="libs/bootstrap-theme.css">
+    <link rel="stylesheet" href="libs/bootstrap.css">
     <script>
-        var model = "hello word";
+        var model = {
+            user: "Levon",
+            courses: [{name:"html", passed: true},
+                {name:"js", passed: false},
+                {name:"php", passed: true},
+                {name:"css", passed: false}
+            ]
+        };
+
 
 
         var hello = angular.module('testApp', []);
 
         hello.controller('helloController', function($scope){
-            $scope.texttt = model;
+            $scope.hid1 = false;
+            $scope.hid2 = false;
+            $scope.hid3 = false;
 
-            $scope.clickHendler = function(){
-                $scope.texttt = $scope.newtext;
+            $scope.data = model;
+
+            $scope.addnewcourse = function(){
+                $scope.data.courses.push(
+                        {name: $scope.name,
+                        passed: false
+                        })};
+            $scope.setStyle = function(passed){
+               return passed ? 'color:green':'color:red';
+            };
+
+            $scope.showText = function(data){
+                return data ? 'YES': 'NO';
             }
+
         });
 
     </script>
 </head>
 <body ng-controller="helloController">
-    {{texttt}}
+    <div class="container">
+        <div class="row">
+            <input type="checkbox" ng-model="hid1" />
+            <input type="checkbox" ng-model="hid2" />
+            <input type="checkbox" ng-model="hid3" />
 
-<input ng-model="newtext">
-<button ng-click="clickHendler()">aaa</button>
+
+            <div ng-if="hid1">elem 1</div>
+            <div ng-if="hid2">elem 2</div>
+            <div ng-if="hid3">elem 3</div>
+            <h1>{{data.courses.length}}</h1>
+            <input ng-model="name">
+            <button ng-click="addnewcourse()">aaa</button>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td>courses</td>
+                        <td></td>
+                        <td>passed</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="course in data.courses">
+                        <td>{{course.name}}</td>
+                        <td><input type="checkbox" ng-model="course.passed" /></td>
+                        <td>
+                            <span style="{{setStyle(course.passed)}}">
+                                {{showText(course.passed)}}
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 </html>
